@@ -1,0 +1,20 @@
+[
+    {
+        "token": "f447b20a7fcbf53a5d5be013ea0b15af",
+        "username": "admin",
+        "password": "123456",
+        "roles": ["admin"]
+    },
+    {
+        "token": "f447b20a7fcbf53a5d5be013ea0b15af",
+        "username": "test",
+        "password": "123456",
+        "roles": ["manager"]
+    },
+    {
+        "token": "f447b20a7fcbf53a5d5be013ea0b15af",
+        "username": "test2",
+        "password": "123456",
+        "roles": ["user"]
+    }
+]
