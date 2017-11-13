@@ -9,7 +9,7 @@
                     </template>
 
                     <template v-for="child in item.children" v-if="!child.hidden">
-                        <router-link :to="convPath(child.path)"><MenuItem :name="child.name" class="nav-hide"> {{ child.title }} </MenuItem></router-link>
+                        <router-link :to="PathRegex(child.path)"><MenuItem :name="child.name" class="nav-hide"> {{ child.title }} </MenuItem></router-link>
                     </template>
                 </Submenu>
             </template>
@@ -23,8 +23,8 @@ import { mapGetters } from 'vuex'
 export default {
     props: ['spanValue'],
     methods: {
-        convPath:function(value) {
-            let reg = this.$Pathreg.compile(value);
+        PathRegex: function(value) {
+            let reg = this.$pathregex.compile(value);
             return reg({cate: 'a', id:'1'});
         }
     },

@@ -15,8 +15,8 @@ const Page3 = () => import('@/components/pages/page3')
 const Page4 = () => import('@/components/pages/page4')
 const Page5 = () => import('@/components/pages/page5')
 
-const Manager1 = () => import('@/components/pages/manager1')
-const Manager2 = () => import('@/components/pages/manager2')
+const Manage1 = () => import('@/components/pages/manage1')
+const Manage2 = () => import('@/components/pages/manage2')
 
 const Roles = () => import('@/components/admin/roles')
 const User = () => import('@/components/admin/user')
@@ -131,7 +131,7 @@ export const appendRouter = [
     },
     {
         path: '/navmenu1',
-        redirect: '/manager1',
+        redirect: '/manage1',
         name: 'navmenu1',
         title: '普通管理',
         icon: "stats-bars",
@@ -140,25 +140,25 @@ export const appendRouter = [
         hidden: false,
         children: [
             {
-                path: '/manager',
-                name: 'manager',
+                path: '/manage',
+                name: 'manage',
                 title: '操作管理',
                 component: Index,
                 hidden: false,
                 icon: "wrench",
                 children: [
                     {
-                        path: '/manager1',
-                        name: 'manager1',
+                        path: '/manage1',
+                        name: 'manage1',
                         title: '添加操作',
-                        component: Manager1,
+                        component: Manage1,
                         hidden: false,
                     },
                     {
-                        path: '/manager2',
-                        name: 'manager2',
+                        path: '/manage2',
+                        name: 'manage2',
                         title: '删除操作',
-                        component: Manager2,
+                        component: Manage2,
                         hidden: false,
                         meta: { roles: ['admin'] }
                     }
@@ -279,8 +279,8 @@ export const appendRouter = [
     },
 
     {
-        path: '/manager',
-        name: 'manager',
+        path: '/manage',
+        name: 'manage',
         title: '操作管理',
         component: Index,
         meta: { roles: ['manager', 'admin'] },
@@ -288,17 +288,17 @@ export const appendRouter = [
         icon: "wrench",
         children: [
             {
-                path: '/manager1',
-                name: 'manager1',
+                path: '/manage1',
+                name: 'manage1',
                 title: '添加操作',
-                component: Manager1,
+                component: Manage1,
                 hidden: false,
             },
             {
-                path: '/manager2',
-                name: 'manager2',
+                path: '/manage2',
+                name: 'manage2',
                 title: '删除操作',
-                component: Manager2,
+                component: Manage2,
                 hidden: false,
                 meta: { roles: ['admin'] }
             }

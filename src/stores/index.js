@@ -114,7 +114,9 @@ const actions = {
             Vue.http.post('/user/login', params).then(
                 response => {
                     const data = response.body;
-                    Vue.prototype.$cookies.set('manager', data.token + CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(params['username'])), Vue.prototype.$expire);
+                    Vue.prototype.$cookies.set(Vue.prototype.tokenname,
+                                               data.token + CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(params['username'])),
+                                               Vue.prototype.expire);
                     commit('set_token', data.token);
                     commit('set_user', data.username);
                     commit('set_navname', "default");
@@ -124,7 +126,8 @@ const actions = {
                 reject(error.statusText);
             });
             */
-            /****   调试数据    **/
+
+            /****   调试数据    */
             let params = new Object();
             params['username'] = value.username.trim();
             params['password'] = value.password.trim();
@@ -133,7 +136,7 @@ const actions = {
                     const data = response.body;
                     data.forEach( value => {
                         if ( value.username === params['username'] && value.password == params['password']) {
-                            Vue.prototype.$cookies.set('manager', value.token + value.username, Vue.prototype.$expire);
+                            Vue.prototype.$cookies.set(Vue.prototype.tokenname, value.token + value.username, Vue.prototype.expire);
                             commit('set_token', value.token);
                             commit('set_user', value.username);
                             commit('set_navname', "default");
@@ -149,7 +152,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             /*
             let params = new Object();
-            let token = Vue.prototype.$cookies.get('manager');
+            let token = Vue.prototype.$cookies.get(Vue.prototype.tokenname);
             params['username'] = CryptoJS.enc.Base64.parse(token.slice(32, token.length)).toString(CryptoJS.enc.Utf8);
 
             Vue.http.post('/user/info', params).then(
@@ -168,7 +171,7 @@ const actions = {
             */
             /****   调试数据   ***/
             let params = new Object();
-            let token = Vue.prototype.$cookies.get('manager');
+            let token = Vue.prototype.$cookies.get(Vue.prototype.tokenname);
             params['username'] = token.slice(32, token.length);
             Vue.http.get('/static/data.json').then(
                 response => {
@@ -185,7 +188,7 @@ const actions = {
                     reject(response);
                 }
             )
-            /****/
+            /***/
         })
     },
     UpdateVcode( { commit } ) {
@@ -205,7 +208,7 @@ const actions = {
         return new Promise((resolve) => {
             commit('set_token', '');
             commit('set_roles', []);
-            Vue.prototype.$cookies.del('manager');
+            Vue.prototype.$cookies.del(Vue.prototype.tokenname);
             resolve();
         })
     },

@@ -13,13 +13,14 @@ import store from './stores/index'
 
 import cookies from './util/cookies.js'
 Vue.prototype.$cookies = cookies;
-Vue.prototype.$expire = 20 * 60;
+Vue.prototype.expire = 20 * 60;
+Vue.prototype.tokenname = 'manage';
 
 import moment from 'moment'
 Vue.prototype.$moment = moment;
 
-import Pathreg from 'path-to-regexp'
-Vue.prototype.$Pathreg = Pathreg;
+import pathregex from 'path-to-regexp'
+Vue.prototype.$pathregex = pathregex;
 
 
 import VueResource from 'vue-resource'
@@ -32,7 +33,7 @@ Vue.http.options.credentials = true;    //跨域资源共享CORS;  服务端设�
 
 // http请求拦截器，当cookie过期后跳转到登录页面
 Vue.http.interceptors.push((request, next) => {
-    let token = Vue.prototype.$cookies.get('manager');
+    let token = Vue.prototype.$cookies.get(Vue.prototype.tokenname);
 
     if (token) {
         request.headers.set('X-CSRF-TOKEN', 'TOKEN');
@@ -57,8 +58,8 @@ function isExists(value, to) {
         if ( value.children ) {
             return isExists(value.children, to)
         } else {
-            let reg = Pathreg(value.path);
-            if ( reg.exec(to.path) !== null ) {    //  Pathreg.compile(to.path)
+            let reg = Vue.prototype.$pathregex(value.path);
+            if ( reg.exec(to.path) !== null ) {    //  pathregex.compile(to.path)
                 return true;
             } else {
                 return false;
@@ -72,7 +73,7 @@ function isExists(value, to) {
 
 router.beforeEach((to, from, next) => {
     // 刷新页面时，防止store数据丢失
-    var cookie = Vue.prototype.$cookies.get('manager');
+    var cookie = Vue.prototype.$cookies.get(Vue.prototype.tokenname);
     store.state.token = cookie;
 
     if (store.getters.token) {
@@ -89,18 +90,18 @@ router.beforeEach((to, from, next) => {
                         });
                     },
                     response => {
-                        Vue.prototype.$cookies.del('manager');     // 当获取用户信息出错时，删除cookie并跳到login页面
+                        Vue.prototype.$cookies.del(Vue.prototype.tokenname);     // 当获取用户信息出错时，删除cookie并跳到login页面
                         next({path: '/login'});
                     }
                 ).catch( error => {
-                    Vue.prototype.$cookies.del('manager');
+                    Vue.prototype.$cookies.del(Vue.prototype.tokenname);
                     next({path: '/login'});
                 });
             } else {
                 store.dispatch('ChangeSideRouters');
                 if (isExists(store.getters.routers, to)) {
                     next();
-                    Vue.prototype.$cookies.set('manager', store.getters.token, Vue.prototype.$expire);  // 当在页面中跳转时(有操作动作时)，延长cookie时间
+                    Vue.prototype.$cookies.set(Vue.prototype.tokenname, store.getters.token, Vue.prototype.expire);  // 当在页面中跳转时(有操作动作时)，延长cookie时间
                 } else {
                     next({path: '/error'});
                 }
@@ -114,7 +115,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 });
-
 
 new Vue({
     el: '#app',
