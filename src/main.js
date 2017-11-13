@@ -12,7 +12,8 @@ import router from './router/index'
 import store from './stores/index'
 
 import cookies from './util/cookies.js'
-Vue.prototype.$cookies = cookies
+Vue.prototype.$cookies = cookies;
+Vue.prototype.$expire = 20 * 60;
 
 import moment from 'moment'
 Vue.prototype.$moment = moment;
@@ -99,8 +100,7 @@ router.beforeEach((to, from, next) => {
                 store.dispatch('ChangeSideRouters');
                 if (isExists(store.getters.routers, to)) {
                     next();
-                    let expire = 20 * 60;
-                    Vue.prototype.$cookies.set('manager', store.getters.token, expire);  // 当在页面中跳转时(有操作动作时)，延长cookie时间
+                    Vue.prototype.$cookies.set('manager', store.getters.token, Vue.prototype.$expire);  // 当在页面中跳转时(有操作动作时)，延长cookie时间
                 } else {
                     next({path: '/error'});
                 }

@@ -114,10 +114,10 @@ const actions = {
             Vue.http.post('/user/login', params).then(
                 response => {
                     const data = response.body;
-                    let expire = 20 * 60;
-                    Vue.prototype.$cookies.set('manager', data.token + CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(params['username'])), expire);
+                    Vue.prototype.$cookies.set('manager', data.token + CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(params['username'])), Vue.prototype.$expire);
                     commit('set_token', data.token);
                     commit('set_user', data.username);
+                    commit('set_navname', "default");
                     resolve();
                 }
             ).catch ( error => {
@@ -133,10 +133,10 @@ const actions = {
                     const data = response.body;
                     data.forEach( value => {
                         if ( value.username === params['username'] && value.password == params['password']) {
-                            let expire = 200 * 60;
-                            Vue.prototype.$cookies.set('manager', value.token + value.username, expire);
+                            Vue.prototype.$cookies.set('manager', value.token + value.username, Vue.prototype.$expire);
                             commit('set_token', value.token);
                             commit('set_user', value.username);
+                            commit('set_navname', "default");
                             resolve();
                         }
                     })
@@ -236,7 +236,6 @@ const actions = {
     ChangeSideRouters ( { commit }) {         // 生成侧栏菜单
         return new Promise(resolve => {
             /*  start： 顶部导航   */
-            let childRouters = [];
             let navname = '';
             if (state.navname === '') {
                 if (window.sessionStorage.getItem('navname')) {
@@ -248,6 +247,7 @@ const actions = {
                 navname = state.navname;
             }
 
+            let childRouters = [];
             state.addRouters.forEach( value => {
                 if ( value.name == navname) {          // 根据顶部导航过滤侧栏菜单
                     childRouters.push(...value.children);
